@@ -1,0 +1,139 @@
+%%
+% Plantilla de Memoria
+% Modificación de una plantilla de Latex de Nicolas Diaz para adaptarla 
+% al castellano y a las necesidades de escribir informática y matemáticas.
+%
+% Editada por: Mario Román
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PAQUETES Y CONFIGURACIÓN DEL DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+%% Configuración del papel.
+% microtype: Tipografía.
+% mathpazo: Usa la fuente Palatino.
+\documentclass[a4paper, 11pt]{article}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{mathpazo}
+
+% Indentación de párrafos para Palatino
+\setlength{\parindent}{0pt}
+  \parskip=8pt
+\linespread{1.05} % Change line spacing here, Palatino benefits from a slight increase by default
+
+
+%% Castellano.
+% noquoting: Permite uso de comillas no españolas.
+% lcroman: Permite la enumeración con numerales romanos en minúscula.
+% fontenc: Usa la fuente completa para que pueda copiarse correctamente del pdf.
+\usepackage[spanish,es-noquoting,es-lcroman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\selectlanguage{spanish}
+
+\makeatletter
+
+%----------------------------------------------------------------------------------------
+%	TÍTULO
+%----------------------------------------------------------------------------------------
+% Configuraciones para el título.
+% El título no debe editarse aquí.
+\renewcommand{\maketitle}{
+  \begin{flushright} % Right align
+  
+  {\LARGE\@title} % Increase the font size of the title
+  
+  \vspace{50pt} % Some vertical space between the title and author name
+  
+  {\large\@author} % Author name
+  \\\@date % Date
+  \vspace{40pt} % Some vertical space between the author block and abstract
+  \end{flushright}
+}
+
+% Título
+\title{\textbf{How to disable Bomba\_Nucelar}\\ % Title
+Práctica 3 de EC} % Subtitle
+
+\author{\textsc{Óscar Bermúdez Garrido} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+%% Inicio del documento
+
+	\section{Mecanismo interno}
+		La bomba pide 2 contraseñas, una alfanumérica y otra sólo numérica y realiza una serie de comparaciones
+		con varias contraseñas de cada uno de los 2 tipos que dispone.
+		
+		Estas comparaciones están pensadas para que el resultado de las comparaciones si las contraseñas
+		introducidas son correctas permita desactivarla pero si alguna es incorrecta, el resultado será su
+		detonación.
+		
+		La bomba en sí, está implementada para tener código innecesario cuyo único propósito es complicar el
+		proceso de desensamblado, por ende, complica la desactivación y asegurándose que para lograr desactivarla
+		se ha comprendido perfectamente el funcionamiento de la misma. Pues si nos limitamos a tomar los primeros
+		valores que se comparan, acabará explotando.
+		
+		Además, en el hipotético caso de que transcurra demasiado tiempo en la introducción de las
+		contraseñas(una hora), detonará independientemente de si eran las correctas.
+
+	\section{Desactivación}
+		Hacemos un volcado sobre un archivo nuevo, el cuál abriremos con un editor de texto.
+		
+		A continuación, ejecutaremos nuestro desensamblador(en mi caso, \textit{ddd}) sobre \textbf{bomba\_nucelar},
+		
+		Buscamos la función \textit{main} y la copiamos en un nuevo archivo. Sobre esta función, buscamos cada
+		vez que utilizamos \textit{cmp} y \textit{strncmp}:
+		
+		\begin{itemize}
+			\item Cada vez que aparece \textit{cmp}, estamos comparando números, por tanto, tenemos que pedir a
+			nuestro desensamblador que nos muestre el contenido del registro como decimal, los posibles valores
+			que podemos ver serán el tiempo que permito como máximo para desactivar la bomba y las candidatas a
+			claves numéricas. Abriremos otro archivo e introduciremos éstas.
+
+			\item Cada vez que aparece \textit{strncmp}, estamos comparando cadenas de caracteres, por tanto,
+			tenemos que mirar un par de instrucciones antes y veremos la dirección desde la que se está introduciendo
+			y pediremos a nuestro desensamblador que nos muestro el contenido de dicha dirección como texto para
+			así poder ver la clave alfanumérica. Introduciremos éstas en el archivo anteriormente abierto.
+		\end{itemize}
+
+		Luego, con todas las combinaciones de contraseñas que hemos sacado, podemos intentar introducir cada 
+		combinación posible ya que son pocas o podemos intentar comprender el código paso a paso, lo cuál
+		puede parecer imposible pero es más sencillo de lo que parece(además de aportar un interesante ejercicio
+		para ver si se comprendió correctamente el lenguaje ensamblador) y ver qué valores hacen detonar la
+		bomba, por tanto, qué comparaciones son necesarias cumplir y cuáles no, y por tanto, saber qué contraseñas
+		son las correctas.
+
+\end{document}

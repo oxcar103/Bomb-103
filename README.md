@@ -1,4 +1,8 @@
-# Bomb 103
-Práctica sobre desensambladores de Estructura de Computadores(EC)
+Bomb 103
+========================
+Práctica sobre desensambladores de Estructura de Computadores(EC).  
 
-La licencia no se aplicará sobre el material aportado por el profesor.
+Licencia  
+------------------------
+El proyecto en conjunto se distribuye bajo la licencia [GPL](LICENSE).  
+La licencia no se aplicará sobre el material aportado por el profesor.  
